@@ -6,10 +6,12 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
 
 class RegisterType extends AbstractType
 {
@@ -17,9 +19,9 @@ class RegisterType extends AbstractType
     {
         $builder
             ->add('firstname', TextType::class, [
+                'constraints' => new Length(2, 30),
                 'attr' => [
                     'placeholder' => 'Write your firstname'
-                    //'label' => 'Votre prénom' - This is used for override the name of the field use 
                 ]
             ])
             ->add('lastname', TextType::class, [
@@ -29,20 +31,21 @@ class RegisterType extends AbstractType
             ])
             ->add('email', EmailType::class, [
                 'attr' => [
+                    'constraints' => new Length(2, 60),
                     'placeholder' => 'Write your email'
                 ]
             ])
-            ->add('password', PasswordType::class, [
+            ->add('password', RepeatedType::class, [
+                'constraints' => new Length(6, 30),
+                'type' => PasswordType::class,
+                'invalid_message' => "Passwords aren't similar",
                 'attr' => [
                     'placeholder' => 'Write your password'
-                ]
-            ])
-            ->add('confirm_password', PasswordType::class, [
-                'label' => 'Confirm your password',
-                'mapped' => false,
-                'attr' => [
-                    'placeholder' => 'Confirm your password'
-                ]
+                ],
+                'required' => true,
+                'first_options' => ['label' => 'Password'],
+                'second_options' => ['label' => 'Confirm password']
+
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Register'
