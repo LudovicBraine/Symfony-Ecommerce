@@ -35,6 +35,10 @@ An authenticator is a class with all the methods used by symfony to authenticate
 # Show all the route available in your application 
 - symfony console debug:router
 
+# Create admin dashboard as a controller with easyadmin
+- composer require easycorp/easyadmin-bundle 
+- symfony console make:admin:dashboard
+- symfony console make:admin:crud
 
 TO DO : 
 
