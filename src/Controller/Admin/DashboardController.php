@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Controller\Admin\UserCrudController;
+use App\Entity\Carrier;
 use App\Entity\Category;
 use App\Entity\Product;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
@@ -42,6 +43,7 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Users', 'fas fa-user', User::class),
             MenuItem::linkToCrud('Categories', 'fas fa-list', Category::class),
             MenuItem::linkToCrud('Product', 'fas fa-tag', Product::class),
+            MenuItem::linkToCrud('Carriers', 'fas fa-truck', Carrier::class),
         ];
     }
 }
