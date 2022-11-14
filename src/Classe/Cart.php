@@ -64,18 +64,20 @@ class Cart
     {
         $cartComplete = [];
 
-        foreach ($this->get() as $id => $quantity) {
-            $productObject =  $this->productRepository->findOneBy(['id' => $id]);
+        if ($this->get()) {
+            foreach ($this->get() as $id => $quantity) {
+                $productObject =  $this->productRepository->findOneBy(['id' => $id]);
 
-            if (!$productObject) {
-                $this->removeOne($id);
-                continue;
+                if (!$productObject) {
+                    $this->removeOne($id);
+                    continue;
+                }
+
+                $cartComplete[] = [
+                    'product' => $productObject,
+                    'quantity' => $quantity
+                ];
             }
-
-            $cartComplete[] = [
-                'product' => $productObject,
-                'quantity' => $quantity
-            ];
         }
 
         return $cartComplete;
