@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Controller\Admin\UserCrudController;
 use App\Entity\Carrier;
 use App\Entity\Category;
+use App\Entity\Order;
 use App\Entity\Product;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
@@ -24,7 +25,7 @@ class DashboardController extends AbstractDashboardController
     public function index(): Response
     {
         $adminUrlGenerator = $this->adminUrlGenerator
-            ->setController(UserCrudController::class)
+            ->setController(OrderCrudController::class)
             ->generateUrl();
 
         return $this->redirect($adminUrlGenerator);
@@ -44,6 +45,7 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Categories', 'fas fa-list', Category::class),
             MenuItem::linkToCrud('Product', 'fas fa-tag', Product::class),
             MenuItem::linkToCrud('Carriers', 'fas fa-truck', Carrier::class),
+            MenuItem::linkToCrud('Orders', 'fas fa-shopping-cart', Order::class),
         ];
     }
 }
