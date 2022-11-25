@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Products list{% endblock %}
+
+{% block content %}
+        <div class="row">
+            <div class="col-md-10"> 
+                <h3> Our products </h3>
+                <div class="row product-container">
+                    {% for product in products %}
+                        <div class="col-md-4">
+                            <div class="product-item text-center">
+                                <a href="{{path('app_product', {'slug': product.slug}) }}"> <img src="images/{{ product.image }}" alt={{product.name}} class="img-fluid"/> </a>
+                                <h5> {{ product.name }} </h5>
+                                {% if product.stripeId == null %}
+                                    <a href="{{ path('app_stripe_add', {'id': product.id}) }}" class="btn btn-primary mb-5"> Create stripe </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+    </div>
+{% endblock %}
