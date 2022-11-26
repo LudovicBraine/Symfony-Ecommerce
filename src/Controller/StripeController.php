@@ -49,8 +49,10 @@ class StripeController extends AbstractController
         );
 
         $stripeId = $response->toArray()['id'];
+        $stripePriceId = $response->toArray()['default_price'];
 
         $product->setStripeId($stripeId);
+        $product->setStripeId($stripePriceId);
         $em->persist($product);
         $em->flush();
 

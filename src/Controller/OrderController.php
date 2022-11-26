@@ -86,7 +86,7 @@ class OrderController extends AbstractController
             $checkout_session = \Stripe\Checkout\Session::create([
                 'line_items' => [[
                     # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
-                    'price' => 'price_1M6jl6ITNoLSnaU2IzwvY6np',
+                    'price' => 'price_1M7i01ITNoLSnaU2UJbXpfvn',
                     'quantity' => 1,
                   ]],
                 'mode' => 'payment',
