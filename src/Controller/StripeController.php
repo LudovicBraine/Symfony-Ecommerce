@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Product;
 use App\Repository\ProductRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,9 +30,11 @@ class StripeController extends AbstractController
         ]);
     }
 
-    #[Route('/stripe/add', name: 'app_stripe_add')]
-    public function add(): Response
+    #[Route('/stripe/add/{id}', name: 'app_stripe_add')]
+    public function add($id, EntityManagerInterface $em): Response
     {
+        $product = $this->productRepository->findOneBy(['id' => $id]);
+
         $response = $this->client->request(
             'POST',
             'https://api.stripe.com/v1/products',
@@ -46,6 +48,13 @@ class StripeController extends AbstractController
             ]
         );
 
-        return $response->toArray()['id'];
+        $stripeId = $response->toArray()['id'];
+
+        $product->setStripeId($stripeId);
+        $em->persist($product);
+        $em->flush();
+
+
+        return $this->redirectToRoute('app_stripe');
     }
 }
