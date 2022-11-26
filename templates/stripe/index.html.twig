@@ -13,21 +13,21 @@
                             <th scope="col">#</th>
                             <th scope="col">Name</th>
                             <th scope="col">Image</th>
-                            <th scope="col">stripeId</th>
+                            <th scope="col">Price</th>
                             <th scope="col"> actions </th>
                             </tr>
                         </thead>
                         <tbody>
                         {% for product in products %}
-                            <tr>
-                                <th scope="row">{{product.id}}</th>
-                                <td>{{product.name}}</td>
-                                <td><img src="images/{{ product.image }}" alt={{product.name}} class="img-fluid" style="width: 75px"/></td>
-                                <td>{{product.stripeId}}</td>
-                                {% if product.stripeId == null %}
+                            {% if product.stripeId == null %}
+                                <tr>
+                                    <th scope="row">{{product.id}}</th>
+                                    <td>{{product.name}}</td>
+                                    <td><img src="images/{{ product.image }}" alt={{product.name}} class="img-fluid" style="width: 75px"/></td>
+                                    <td> {{ (product.price / 100)|number_format(2, '.', ',')}} €</td>
                                     <td> <a href="{{ path('app_stripe_add', {'id': product.id}) }}" class="btn btn-primary"> Create stripe </a> </td>
-                                {% endif %}
-                            </tr>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                         </tbody>
                     </table>
