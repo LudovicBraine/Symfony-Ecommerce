@@ -15,7 +15,10 @@
 		<!-- Bootstrap core CSS -->
 		<link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
 		<link href="{{ asset('assets/css/boutiqueFrancaise.css') }}" rel="stylesheet">
+		{% block javascript %}
+		    <script src="https://js.stripe.com/v3/"></script>
 
+		{% endblock %}
 		<style>
 			.bd-placeholder-img {
 				font-size: 1.125rem;

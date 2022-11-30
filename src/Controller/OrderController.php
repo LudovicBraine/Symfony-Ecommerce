@@ -7,7 +7,6 @@ use App\Entity\Order;
 use App\Entity\OrderDetails;
 use App\Form\OrderType;
 use Doctrine\ORM\EntityManagerInterface;
-use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,6 +63,9 @@ class OrderController extends AbstractController
             $order->setDelivery($delivery_content);
             $order->setIsPaid(0);
 
+            $reference =  $date->format('dmY').'-'.uniqid();
+            $order->setReference($reference);
+
             $em->persist($order);
 
             foreach ($cart->getAll() as $product) {
@@ -73,34 +75,16 @@ class OrderController extends AbstractController
                 $orderDetails->setQuantity($product['quantity']);
                 $orderDetails->setPrice($product['product']->getPrice());
                 $orderDetails->setTotal($product['product']->getPrice() * $product['quantity']);
-
                 $em->persist($orderDetails);
             }
 
-            //$em->flush();
-
-            Stripe::setApiKey('sk_test_51M4Q9SITNoLSnaU2lCuvj6KcrK7MvIHSbuWHU9LwxpNq5ytBrq5cGLLMXQRqscvA8ats1TdbEjZUJGiaeGtmDL1I002Ov9nc4r');
-
-            $YOUR_DOMAIN = 'http://localhost:8000';
-
-            $checkout_session = \Stripe\Checkout\Session::create([
-                'line_items' => [[
-                    # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
-                    'price' => 'price_1M7i01ITNoLSnaU2UJbXpfvn',
-                    'quantity' => 1,
-                  ]],
-                'mode' => 'payment',
-                'success_url' => $YOUR_DOMAIN . '/success.html',
-                'cancel_url' => $YOUR_DOMAIN . '/cancel.html',
-            ]);
-
-            dump($checkout_session->id);
-            dd($checkout_session);
+            $em->flush();
 
             return $this->render('order/add.html.twig', [
                 'cart' => $cart->getAll(),
                 'carrier' => $carriers,
-                'delivery' => $delivery_content
+                'delivery' => $delivery_content,
+                'reference' => $order->getReference()
             ]);
         }
         return $this->redirectToRoute('cart');
