@@ -11,7 +11,7 @@
     <a href="{{ path('app_account')}}"> Return </a>
     <hr>
     {% if app.user.addresses|length == 0 %}
-        <p class="text-center"> You didn't had addresses to your account, to add one <a href=""> click here </a> <p>
+        <p class="text-center"> You didn't had addresses to your account, to add one <a href="{{ path('app_account_address_add') }}"> click here </a> <p>
     {% else %}
     <div class="row">
         {% for address in app.user.addresses %}

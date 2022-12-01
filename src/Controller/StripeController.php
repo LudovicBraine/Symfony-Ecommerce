@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Stripe\Stripe;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 class StripeController extends AbstractController
 {
@@ -38,9 +37,8 @@ class StripeController extends AbstractController
     #[Route('/stripe/create-session/{reference}', name: 'stripe_create_session')]
     public function StripeCreateSession(Cart $cart, $reference, EntityManagerInterface $em ): Response
     {
-
         $order = $this->orderRepository->findOneBy(['reference' => $reference]);
-
+        
         if(!$order){
             return $this->redirect('order');
         }
@@ -63,6 +61,7 @@ class StripeController extends AbstractController
             'shipping_options' => [
                 [
                   'shipping_rate_data' => [
+                    'type' => 'fixed_amount',
                     'fixed_amount' => ['amount' => 0, 'currency' => 'eur'],
                     'display_name' => $order->getCarrierName(),
                     'delivery_estimate' => [
@@ -76,11 +75,52 @@ class StripeController extends AbstractController
                 $products_for_stripe
             ],
             'mode' => 'payment',
-            'success_url' => $YOUR_DOMAIN . '/success.html',
-            'cancel_url' => $YOUR_DOMAIN . '/cancel.html',
+            'success_url' => $YOUR_DOMAIN . '/stripe/success/{CHECKOUT_SESSION_ID}',
+            'cancel_url' => $YOUR_DOMAIN . '/stripe/fail/{CHECKOUT_SESSION_ID}',
         ]);
 
+        $order->setStripeSessionId($checkout_session->id);
+        $em->persist($order);
+        $em->flush();
+
         return $this->redirect($checkout_session->url);
+    }
+
+    #[Route('/stripe/success/{stripeSessionId}', name: 'app_order_success')]
+    public function StripePaymentSuccess($stripeSessionId, OrderRepository $orderRepository, EntityManagerInterface $em, Cart $cart): Response
+    {
+        $order = $orderRepository->findOneBy(['stripeSessionId' => $stripeSessionId]);
+
+        if(!$order || $order->getUser() != $this->getUser()){
+            return $this->redirectToRoute('home');
+        }
+
+        if(!$order->isIsPaid())
+        {
+            $cart->remove();
+
+            $order->setIsPaid(1);
+            $em->persist($order);
+            $em->flush();
+        }
+
+        return $this->render('order/success.html.twig', [
+            'order' => $order
+        ]);
+    }
+
+    #[Route('/stripe/fail/{stripeSessionId}', name: 'app_order_fail')]
+    public function StripePaymentFail($stripeSessionId, OrderRepository $orderRepository, EntityManagerInterface $em): Response
+    {
+        $order = $orderRepository->findOneBy(['stripeSessionId' => $stripeSessionId]);
+
+        if(!$order || $order->getUser() != $this->getUser()){
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('order/fail.html.twig', [
+            'order' => $order
+        ]);
     }
 
     #[Route('/stripe/add/{id}', name: 'app_stripe_add')]

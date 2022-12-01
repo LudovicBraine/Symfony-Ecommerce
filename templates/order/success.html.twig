@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Payment confirmation {% endblock %}
+
+{% block content %}
+    <h2> Order confirmation </h2>
+    <p> Hello <strong> {{ order.user.firstname}} {{ order.user.lastname }} </strong> , </br> </br>
+    Your command is the <strong> n°{{order.reference}} </strong> </br>
+    An email has been send at the email <strong> {{ order.user.email }} </strong>
+    <hr>
+    Your command will be deliver by {{ order.carrierName }} at : </br>
+    {{ order.delivery|raw }}
+    <hr>
+    To follow your order, go to your orders list : <a href="{{ path('account_order') }}"> Orders </a>
+{% endblock %}

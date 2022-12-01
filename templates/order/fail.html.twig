@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Payment failure {% endblock %}
+
+{% block content %}
+    <h2> Order failure </h2>
+    <p> Hello <strong> {{ order.user.firstname}} {{ order.user.lastname }} </strong> , </br> </br>
+    it looks like your payment for the order <strong> n°{{order.reference}} </strong>  has failed </br>
+    An failure email has been send at the email <strong> {{ order.user.email }} </strong>
+    <hr>
+    <a href="{{ path('order') }}" class="btn btn-info"> Try again </a>
+{% endblock %}
