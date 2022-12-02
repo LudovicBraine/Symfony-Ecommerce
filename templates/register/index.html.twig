@@ -5,5 +5,13 @@
 	<h1>
 		Register
 	</h1>
+	{% if notification %}
+		<div class="alert alert-danger">
+			{{notification}}
+		</div>
+		<hr>
+	{% endif %}
+	
+	{{ form(form) }}
 
-	{{ form(form) }}{% endblock %}
+{% endblock %}

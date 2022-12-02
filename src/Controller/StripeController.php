@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Classe\Cart;
+use App\Classe\Mail;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -102,6 +103,10 @@ class StripeController extends AbstractController
             $order->setIsPaid(1);
             $em->persist($order);
             $em->flush();
+
+            $mail = new Mail();
+            $content = "Merci pour votre commande <br>".$order->getUser()->getFirstname()."Votre paiment à bien été effectué";
+            $mail->send($order->getUser()->getEmail(), $order->getUser()->getFirstname(), "Votre commande La boutique française", $content);
         }
 
         return $this->render('order/success.html.twig', [
