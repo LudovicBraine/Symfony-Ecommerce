@@ -10,19 +10,24 @@
 	</h1>
 	Welcome
 	{{ app.user.firstname}}
-	on your account section and where you will manage your personal informations
-
+	on your account section and where you will manage your personal informations <br>
+	{% if is_granted('ROLE_ADMIN') %}
+		<a href="/admin">  Access backoffice </a> <br>
+	{% endif %}
 	<h1>
-		To Do List :
+		Functionnalities : 
 	</h1>
 	<hr>
-	{% if is_granted('ROLE_ADMIN') %}
-		- <a href="/admin">  Access backoffice </a> <br>
-	{% endif %}
-	- <a href="{{ path('app_account_edit_password')}}">  Edit password </a>
-	<br>
-	- <a href="{{ path('app_account_address')}}">  Manage addresses </a>
-	<br>
-	- <a href="{{ path('account_order')}}">  Orders </a>
-	<br>
-</hr>{% endblock %}
+	<div class="row">
+		<div class="col-md-4">
+			<div class="account-item text-center"> <a href="{{ path('app_account_edit_password')}}">  Edit password </a> </div>
+		</div>
+		<div class="col-md-4">
+			<div class="account-item text-center"> <a href="{{ path('app_account_address')}}">  Manage addresses </a> </div>
+		</div>
+		<div class="col-md-4">
+			<div class="account-item text-center"> <a href="{{ path('account_order')}}">  Orders </a> </div>
+		</div>
+	</div> 
+	</hr>
+{% endblock %}
