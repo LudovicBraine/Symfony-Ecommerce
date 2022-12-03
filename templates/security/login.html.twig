@@ -10,6 +10,10 @@
 				<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 			{% endif %}
 
+			{% for message in app.flashes('notice') %}
+            	<div class="alert alert-info"> {{message}} </div>
+        	{% endfor %}
+
 			{% if app.user %}
 				<div class="mb-3">
 					You are logged in as
@@ -30,9 +34,12 @@
 				Sign in
 			</button>
 			<hr>
-			<p class="text-center"> <a href="{{ path('app_register') }}">
-				Create account
-			</a> </p>
+			<p class="text-center"> 
+				<a href="{{ path('app_register') }}">Create account</a>
+			</p> <br>
+			<p class="text-center"> 
+				<a href="{{ path('reset_password') }}">Forget password ?</a>
+			</p>
 		</form>
 	</div>
 {% endblock %}

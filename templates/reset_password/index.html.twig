@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reset Password
+{% endblock %}
+
+{% block content %}
+	<div class="block-small">
+        {% for message in app.flashes('notice') %}
+            <div class="alert alert-info"> {{message}} </div>
+        {% endfor %}
+		<form method="post">
+			<h1 class="h3 mb-3 font-weight-normal">Reset password</h1>
+			<label for="inputEmail">Email</label>
+			<input type="email" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+
+			<button class="btn btn-lg btn-info btn-block mt-3" type="submit">
+				Confirm
+			</button>
+			<hr>
+			<p class="text-center"> <a href="{{ path('app_login') }}">
+				Log in
+			</a> </p>
+		</form>
+	</div>
+{% endblock %}
