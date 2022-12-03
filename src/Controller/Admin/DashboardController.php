@@ -13,6 +13,7 @@ use App\Entity\Carrier;
 use App\Entity\Category;
 use App\Entity\Order;
 use App\Entity\Product;
+use App\Entity\Header;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
 class DashboardController extends AbstractDashboardController
@@ -46,6 +47,7 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Product', 'fas fa-tag', Product::class),
             MenuItem::linkToCrud('Carriers', 'fas fa-truck', Carrier::class),
             MenuItem::linkToCrud('Orders', 'fas fa-shopping-cart', Order::class),
+            MenuItem::linkToCrud('Header', 'fas fa-desktop', Header::class),
         ];
     }
 }

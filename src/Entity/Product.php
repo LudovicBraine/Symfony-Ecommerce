@@ -42,6 +42,9 @@ class Product
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $stripePriceId = null;
 
+    #[ORM\Column]
+    private ?bool $isBest = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -151,6 +154,18 @@ class Product
     public function setStripePriceId(?string $stripePriceId): self
     {
         $this->stripePriceId = $stripePriceId;
+
+        return $this;
+    }
+
+    public function isIsBest(): ?bool
+    {
+        return $this->isBest;
+    }
+
+    public function setIsBest(bool $isBest): self
+    {
+        $this->isBest = $isBest;
 
         return $this;
     }
