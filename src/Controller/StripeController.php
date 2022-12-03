@@ -96,11 +96,11 @@ class StripeController extends AbstractController
             return $this->redirectToRoute('home');
         }
 
-        if(!$order->isIsPaid())
+        if($order->getState() == 0)
         {
             $cart->remove();
 
-            $order->setIsPaid(1);
+            $order->setState(1);
             $em->persist($order);
             $em->flush();
 
